@@ -51,29 +51,44 @@
 		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		For this task, I implemented simple triangle rasterization. I did this by first finding the maximum and minimum y and x values of the triangle, in order to have a smaller range of pixels to loop through. 
+		I also clamped these values to the screen.
+		I also used the Vector2D object in order to make the 3 sides of the triangle their own vector. Then, for each pixel in that range, I sampled at the pixel's center (x+ 0.5, y + 0.5), and called a helper function called "inside" and passed in the points and vectors (sides) of the triangle, 
+		as well as the current point. The purpose of this function was to determine if the point was inside the triangle. If the inside function returned "true", I used the fill_pixel function to color that point
+		the given color value. 
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
+		The inside function ensured that as we walk from point A to point B, that the cross product between the vector AB and the vector
+        AP (p being the point we're checking) is always positive for every edge (meaning on the left side of the line, if we're walking counter clockwise), or always negative on every edge (if we happen to be walking clockwise). Accepting either case means the triangle draws regardless of winding order, and I counted
+		a cross product of 0 as inside so points exactly on an edge get drawn.
+		If this was true, meaning the point is inside the triangle, I returned true from this helper function.
+
+		After implementing this rasterization, many svgs were filled with color. 
+
+		<p>My algorithm is no worse than one that checks each sample within the bounding box, because it only loops through 
+			the pixels within the bounding box. The whole triangle is inside it since it uses the max and min x and y values.
+		</p>
+
+		<p>As you can see here, the images are filled in with color. The last image shows the tip of a triangle which is experiencing aliasing. There are gaps and jagged edges as I zoomed into the picture. This is because no anti-aliasing methods, such as supersampling, were done yet.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="assets/lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="assets/colored_dragon.png" width="400px"/>
+				  <figcaption>Colored dragon.</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="assets/lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="assets/green_cube.png" width="400px"/>
+				  <figcaption>Green cube.</figcaption>
 				</td>
 			  </tr>
 			  <tr>
 				<td style="text-align: center;">
-				  <img src="assets/lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="assets/stars_hexagons.png" width="400px"/>
+				  <figcaption>Stars and hexagons.</figcaption>
 				</td>
 				<td style="text-align: center;">
-				  <img src="assets/lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
+				  <img src="assets/tip_of_triangle.png" width="400px"/>
+				  <figcaption>Thin aliasing triangle.</figcaption>
 				</td>
 			  </tr>
 			</table>
