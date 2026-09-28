@@ -119,7 +119,32 @@
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Pixel sampling is how we choose a screen pixel's color by looking up the matching spot on a texture image. For each sample inside the triangle, I computed its barycentric weights from the screen-space vertices and used them to blend the vertices' texture coordinates into a (u, v) position. I then scaled (u, v) by the texture's size to get texel coordinates and sampled a color there, which I stored in the sample buffer. Nearest sampling takes the color of the single texel the point lands in, which is fast but looks blocky when the texture is magnified. Bilinear sampling blends the four surrounding texels based on how close the point is to each, so colors transition smoothly between texels.
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/nearest_logo.png" width="400px"/>
+				  <figcaption>Bilinear 1 sample.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="assets/bilinear_16_logo.png" width="400px"/>
+				  <figcaption>Bilinear 16 samples.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/bilinear_logo.png" width="400px"/>
+				  <figcaption>Nearest 1 sample.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="assets/nearest_16_logo.png" width="400px"/>
+				  <figcaption>Nearest 16 samples.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
+		<p>Nearest sampling at 1 sample per pixel shows hard, blocky steps between colors, while bilinear at 1 sample per pixel blends neighboring texels and gives smoother transitions. At 16 samples per pixel, both methods get smoother edges on the blue ring, but nearest still looks harsher inside the texture. The two methods differ most when the texture is magnified, because nearest repeats one texel across many pixels while bilinear blends smoothly between them.</p>
 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
