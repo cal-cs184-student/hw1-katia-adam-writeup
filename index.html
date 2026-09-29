@@ -202,21 +202,46 @@
 		<p>Nearest sampling at 1 sample per pixel shows hard, blocky steps between colors, while bilinear at 1 sample per pixel blends neighboring texels and gives smoother transitions. At 16 samples per pixel, both methods get smoother edges on the blue ring, but nearest still looks harsher inside the texture. The two methods differ most when the texture is magnified, because nearest repeats one texel across many pixels while bilinear blends smoothly between them.</p>
 
 		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		
+		When a texture has to be shrunk on the screen, then sometimes a pixel may cover many texels. If you were to only sample one, then there would be aliasing, like with jaggies or noisy detail.
 
-		<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		So, level sampling uses mipmaps, why are shrunk beforehand, and are blurred copies of the texture and essentiall smooths it out.
 
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
+		To create this, you compute the texture (u, v) at every sample and also its neighor one step to the right and down. This differnce is able to tell you how "fast" the texture changes, which you can then scale by the texture size and take the log2 of to get the mipmap level.
+
+		L_ZERO uses the full-res texture, while L_NEAREST rounds to the closest level, and L_LINEAR blends the two closest levels.
+
+		For tradeoffs:
+
+		Pixel sampling is the fastest but often aliasing occurs when textures are shrunk.
+
+		Level sampling increases memory because the mipmaps is essentially storing repeated texture information just blurred.
+		
+		Supersampling takes more memory as well because its creating more subsamples at every sample point, growing the number of samples very fast.
+		<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/lzero-pnearest.png" width="400px"/>
+				  <figcaption>Level zero, nearest sampling.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="assets/lzero-plinear.png" width="400px"/>
+				  <figcaption>Level zero, bilinear sampling.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/lnearest-pnearest.png" width="400px"/>
+				  <figcaption>
+				  <figcaption>Level nearest, nearest sampling.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="assets/lnearest-plinear.png" width="400px"/>
+				  <figcaption>Level nearest, bilinear sampling.</figcaption>
+				</td>
+			  </tr>
+			</table>
+	
 		</div>
 	</body>
 </html>
