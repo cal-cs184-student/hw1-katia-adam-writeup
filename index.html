@@ -144,14 +144,34 @@
 			  </tr>
 			</table>
 		</div>
-
-
-
-
-		
 		
 		<h2>Task 4: Barycentric coordinates</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		<p>Using barycentric coordinates allows you to express any point inside the triangle as a blend of the three vertices of the triangle. Every point gets three weights (α, β, γ) which always sum to 1. A weight is larger if the point is closer to that vertex. For example, a vertex has 1 for its corresponding weight and 0 for the other 2 weights.
+			
+			This is useful because these weights can be used to blend values represented at the vertex, such as color.
+
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/barycentric-triangle.png" width="400px"/>
+				  <figcaption>A triangle with barycentric coordinates, with a color associated with the weight at each vertex.</figcaption>
+				</td>
+			  </tr>
+			</table>
+
+			<br/>
+			In this triangle, the bottom vertex stores red, the top-left vertex stores blue, and the top-right vertex stores green. Each corner is that pure color becasue its expressing only the color associated with that weight, but as you move a point within the triangle it starts to blend these colors, creating the gradient shown.
+
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/barycentric.png" width="400px"/>
+				  <figcaption>A color wheel created using barycentric coordinates.</figcaption>
+				</td>
+			  </tr>
+			</table>
+
+		</p>
 
 		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
 		Pixel sampling is how we choose a screen pixel's color by looking up the matching spot on a texture image. For each sample inside the triangle, I computed its barycentric weights from the screen-space vertices and used them to blend the vertices' texture coordinates into a (u, v) position. I then scaled (u, v) by the texture's size to get texel coordinates and sampled a color there, which I stored in the sample buffer. Nearest sampling takes the color of the single texel the point lands in, which is fast but looks blocky when the texture is magnified. Bilinear sampling blends the four surrounding texels based on how close the point is to each, so colors transition smoothly between texels.
