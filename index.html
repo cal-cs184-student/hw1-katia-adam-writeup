@@ -95,7 +95,42 @@
 		</div>
 		
 		<h2>Task 2: Antialiasing by Supersampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+		<p>Supersampling is a very useful technique becauase getting a sample at each pixel only once leads to aliasing. The edges start to look jagged, creating "jaggies", and very thing parts of shapes like triangles can start to break or not show. What supersampling does is takes more than one sample at each pixel and averages them, so that smoothing happens and edges start to look smoother.
+
+			To make this change, we changed the sample_buffer so that it stores sample_rate number of colors for each pixel instead of one. The vector is also sized to width * height * sample_rate, to make sure there is enough space for every sample.
+
+			We also edited set_sample_rate and set_framebuffer_target to resize the buffer to the capacity needed by the sample_rate at that time.
+
+			In rasterize_triangle, we made sure to scale the box and vertices of the triangle by sqrt(sample_rate) so that the rasterization happened with these subsamples. Then, it was the same process of checking if a subsample is inside the triangle.
+
+			Finally, resolve_to_framebuffer takes all of the samples for each pixel and averages them before writing to the frambuffer. This is what antialiases the triangle and creates smoother edges.
+		</p>
+
+		<div style="display: flex; flex-direction: column; align-items: center;">
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/supersample-1.png" width="400px"/>
+				  <figcaption>Supersample rate = 1. The tip is broken into disconnected segments, because the triangle is thinner and some pixels are missed when checking for what pixels to highlight.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="assets/supersample-4.png" width="400px"/>
+				  <figcaption>Supersample rate = 4. There are now 4 chances to hit the triangle, so more of the tip is captured and the edges are smoothened.</figcaption>
+				</td>
+			  </tr>
+			  <tr>
+				<td style="text-align: center;">
+				  <img src="assets/supersample-9.png" width="400px"/>
+				  <figcaption>Supersample rate = 9. The edges are even smoother and more of the triangle is captured by checking inside the triangle.</figcaption>
+				</td>
+				<td style="text-align: center;">
+				  <img src="assets/supersample-16.png" width="400px"/>
+				  <figcaption>Supersample rate = 16. The triangle is very smooth and almost all of it is captured by the many subsamples.</figcaption>
+				</td>
+			  </tr>
+			</table>
+		</div>
 
 		<h2>Task 3: Transforms</h2>
 		As you can see here, the robot is dabbing. I gave him new colors: a teal torso, a light blue head, pink and blue legs, and a green and a pink arm. To make the dab, I tilted his head and moved it to the side so it looks tucked into his elbow. For the arms, I moved each arm group's origin to the shoulder so the rotations would pivot from there. I rotated his left arm up so it points straight out at an angle. For his right arm, I rotated the upper arm across his body toward his face, then added a second rotation at the elbow to fold the forearm up over his head. Because the transforms are hierarchical, the forearm inherits the upper arm's rotation, so bending the elbow moves the forearm without detaching it from the rest of the arm.
